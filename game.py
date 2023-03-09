@@ -1,9 +1,10 @@
 # Import libraries
 import names, os, random, sqlite3, sys, time, password_generator, pandas
+from ascii import *
 
 class Utils():
     def skip(self):
-        Game().website()
+        Game().database()
 
     def clear(self):
         # Clear terminal screen
@@ -57,17 +58,7 @@ class Setup():
         clear = Utils().clear
         # Show user text to explain the game
         clear()
-        tprint(r"""  /$$$$$$  /$$$$$$$$  /$$$$$$  /$$   /$$ /$$$$$$$$ /$$
- /$$__  $$| $$_____/ /$$__  $$| $$  | $$| $$_____/| $$
-| $$  \__/| $$      | $$  \ $$| $$  | $$| $$      | $$
-|  $$$$$$ | $$$$$   | $$  | $$| $$  | $$| $$$$$   | $$
- \____  $$| $$__/   | $$  | $$| $$  | $$| $$__/   | $$
- /$$  \ $$| $$      | $$/$$ $$| $$  | $$| $$      | $$
-|  $$$$$$/| $$$$$$$$|  $$$$$$/|  $$$$$$/| $$$$$$$$| $$$$$$$$
- \______/ |________/ \____ $$$ \______/ |________/|________/
-                          \__/
-
-                                                            """, 2)
+        tprint(game_name, 2)
         clear()
         x = random.randint(1, 100)
         if x == 50:
@@ -100,21 +91,7 @@ class Setup():
         # Reference functions for ease of use
         tprint = Utils().timedPrint
         # Show the user a warning saying that SQL injections are illegal
-        tprint("""
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⡶⠿⠿⢶⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⠃⠀⠀⠀⠀⠙⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡿⢡⠀⠀⠀⠀⠀⢀⡈⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⣰⡟⢠⣿⠀⠀⠀⠀⠀⢸⣷⡈⢻⣆⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢀⣼⠏⢠⣿⣿⡆⠀⠀⠀⠀⣸⣿⣷⡄⠹⣆⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢀⣾⠃⣰⣿⣿⣿⡇⠀⠀⠀⠀⣿⣿⣿⣿⡄⠹⣷⡀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢠⡿⠁⣰⣿⣿⣿⣿⣿⠀⠀⠀⢠⣿⣿⣿⣿⣿⣆⠘⣷⡀⠀⠀⠀⠀
-⠀⠀⠀⢠⡿⠁⣼⣿⣿⣿⣿⣿⣿⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣆⠘⢿⡄⠀⠀⠀
-⠀⠀⣠⡟⢀⣼⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣧⠈⢿⡄⠀⠀
-⠀⢰⡿⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⠛⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠈⣿⡄⠀
-⠀⢼⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠆⢸⡇⠀
-⠀⠘⣷⣄⠙⠛⠻⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠟⠛⠋⣠⡿⠃⠀
-⠀⠀⠈⠉⠛⠓⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠛⠛⠉⠀⠀⠀
-                              """)
+        tprint(warning)
         tprint("Warning: Hacking is illegal and has real life consequences.", 1.5)
         tprint("Do not copy any of the actions performed thoughout the game.", 1.5)
         tprint("The creator of this game does not endorse or condone hacking.", 1.5)
@@ -190,6 +167,7 @@ class Stats():
         print(f'\rProgress: {xpBar}   Time Remaining: {healthBar}', end=end)
 
 class Game():
+    # ANSI colour codes
     RED = "\u001b[31;1m"
     GREEN = "\u001b[32;1m"
     RESET = "\u001b[0m"
@@ -213,8 +191,20 @@ class Game():
         exploit = choice("Can you exploit this?", [])
         if exploit:
             clear()
-            tprint("You enter a single quote into the username field and hit submit.", 1.5)
-            tprint(f"The page refreshes with an error message - {self.GREEN}jackpot!{self.RESET}", 1.5)
+
+            # Text entering into box animation
+            spaces = 28 - 1
+            text = ["n", "na", "nam", "name", "name@", "name@e", "name@em", "name@ema", "name@emai", "name@email", "name@email.c", "name@email.", "name@email", "name@emai", "name@ema", "name@em", "name@e", "name@", "name", "nam", "na", "n", "", "p", "pa", "pas", "pass", "passw", "passwo", "passwor", "password", "password'", "password' ", "password' O", "password' OR", "password' OR 1", "password' OR 1=", "password' OR 1=1"]
+            for i in text:
+                print(f"""      +-----------------------------+
+      |{" " + i + "_" + " " * (spaces - len(i))}|
+      +-----------------------------+""", end="\n")
+                sleep(0.15)
+                clear()
+            sleep(1)
+
+            tprint("You enter a query into the username field and hit submit.", 1.5)
+            tprint(f"The page refreshes and lets you in - {self.GREEN}jackpot!{self.RESET}", 1.5)
             tprint(f"You've found a vulnerability, however you need to be quick - {self.RED}time is running out!{self.RESET}", 2)
             editHealth(1, True, False)
             self.database()
@@ -223,7 +213,22 @@ class Game():
 
 
     def database(self):
-        pass
+        # Reference functions for ease of use
+        tprint = Utils().timedPrint
+        clear = Utils().clear
+        choice = Utils().choice
+        editXP = stats.editXP
+        editHealth = stats.editHealth
+        statsBar = stats.statsBar
+        sleep = time.sleep
+
+        tprint("You successfully infiltrate the database and start sifting through the data.", 1.5)
+        tprint("You can see sensitive data that could cause serious data in the wrong hands.\n", 1.5)
+        conn = sqlite3.connect("database.db")
+        db = str(pandas.read_sql_query("SELECT * FROM customer_info", conn))
+        for line in db.splitlines():
+            print(line)
+            sleep(0.1)
 
     def firewall(self):
         pass
