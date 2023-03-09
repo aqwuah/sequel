@@ -170,6 +170,7 @@ class Game():
     # ANSI colour codes
     RED = "\u001b[31;1m"
     GREEN = "\u001b[32;1m"
+    AQUA = "\u001b[36;1m"
     RESET = "\u001b[0m"
 
     def website(self):
@@ -229,8 +230,19 @@ class Game():
         for line in db.splitlines():
             print(line)
             sleep(0.1)
+        sleep(1)
+        clear()
+
+        playstyle = choice(f"Do you want to {self.AQUA}play it safe{self.RESET} and only steal a small amount of data or {self.AQUA}be reckless{self.RESET} and take everything?", ["safe", "reckless"])
+        if playstyle == "safe":
+            print("safe")
+        elif playstyle == "reckless":
+            print("reckless")
 
     def firewall(self):
+        pass
+
+    def security_professionals(self):
         pass
 
     def decryption(self):
