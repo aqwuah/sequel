@@ -223,8 +223,13 @@ class Game():
         statsBar = stats.statsBar
         sleep = time.sleep
 
+        tprint("""       +-----------------------------+
+       |      LOCATION: Database     |
+       +-----------------------------+""", 2)
         tprint("You successfully infiltrate the database and start sifting through the data.", 1.5)
         tprint("You can see sensitive data that could cause serious data in the wrong hands.\n", 1.5)
+
+        # Print each row of a database with an interval
         conn = sqlite3.connect("database.db")
         db = str(pandas.read_sql_query("SELECT * FROM customer_info", conn))
         for line in db.splitlines():
@@ -233,6 +238,7 @@ class Game():
         sleep(1)
         clear()
 
+        # User choose which route they take
         playstyle = choice(f"Do you want to {self.AQUA}play it safe{self.RESET} and only steal a small amount of data or {self.AQUA}be reckless{self.RESET} and take everything?", ["safe", "reckless"])
         if playstyle == "safe":
             print("safe")
